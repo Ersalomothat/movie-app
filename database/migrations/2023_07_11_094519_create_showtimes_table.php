@@ -21,8 +21,7 @@ return new class extends Migration
                 ->constrained('theaters')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->date('showtime_date');
-            $table->date('showtime_time');
+            $table->dateTime('showtime_date');
             $table->timestamps();
         });
     }

@@ -51,7 +51,8 @@ Route::group([
         ->prefix('payment')
         ->as('payment.')
         ->group(function (){
-            Route::get('payment', 'payment')->name('payment');
+            Route::get('booking/payment', 'payment')->name('payment');
+//            Route::get('{booking}/payment', 'payment')->name('payment');
 
 
     });

@@ -34,7 +34,6 @@ class SeatPlan extends Component
                     ->route('home.movie.movie-detail.seat-plan', [
                         'movie' => $this->movie,
                         'seat_number' => $this->seatIdsToString()
-
                     ])
                     ->with('warning','Number of seats allow to take are six!');
         }
@@ -71,7 +70,7 @@ class SeatPlan extends Component
 
     public function seatIdsToString(): string
     {
-        return implode(",", $this->id_seats);
+        return arrayToStr($this->id_seats);
     }
 
 

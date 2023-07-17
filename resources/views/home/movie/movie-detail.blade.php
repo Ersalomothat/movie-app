@@ -62,7 +62,8 @@
                     </div>
 
                 </div>
-                <a href="{{route('home.movie.movie-detail.seat-plan', $movie["id"])}}" class="custom-button">book tickets</a>
+                <a href="{{route('home.movie.movie-detail.seat-plan', $movie["id"])}}" class="custom-button">book
+                    tickets</a>
             </div>
         </div>
     </section>
@@ -79,8 +80,36 @@
                         <h3 class="title">Description</h3>
                         <p>{{$movie->description}}</p>
                     </div>
+                    <div class="tab summery-review mt-4">
+                        <div class="tab-area mt-2">
+                            <div class="tab-item active" style="">
+                                @foreach($show_times as $show)
+                                <div class="movie-review-item">
+                                    <div class="author">
+{{--                                        <div class="thumb">--}}
+{{--                                            <a href="#0">--}}
+{{--                                                <img src="assets/images/cast/cast04.jpg" alt="cast">--}}
+{{--                                            </a>--}}
+{{--                                        </div>--}}
+                                        <div class="movie-review-info">
+                                            <h6 class="subtitle"><a href="#0">{{$show->teather["theater_name"]}}</a></h6>
+                                            <span>{{$show->teather["theater_location"]}}</span>
+                                            <span>{{$show["showtime_date"]}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="movie-review-content">
+                                        <a href="" class="custom-button">book tickets</a>
+                                    </div>
+                                </div>
+                                @endforeach
+
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
+
         </div>
     </section>
     <!-- ==========Movie-Section========== -->

@@ -13,12 +13,23 @@ class UserRepository
         $this->user = $user ?? new User();
     }
 
-    public function create($user) {
+    public function find($id):User
+    {
+        return User::find($id);
+    }
+    public function findByEmail(string $email):User
+    {
+        return User::whereEmail($email)->first();
+    }
+
+    public function create($user): User
+    {
         return $this->user->create($user);
     }
+
     public function delete($id)
     {
-        $this->user->delete($id);
+        return $this->user->delete($id);
 
     }
 

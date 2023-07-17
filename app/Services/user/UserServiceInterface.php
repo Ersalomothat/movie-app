@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Services\user;
+use App\Models\User;
 
 interface UserServiceInterface
 {
-    public function create($data);
-    public function findById($id);
-    public function findByEmail($email);
-    public function getAll();
-    public function delete($id);
+    public function create($data): User;
+    public function findById($id):User;
+    public function findByEmail($email):User;
+    public function getAll():array;
+    public function delete($id):bool;
 }

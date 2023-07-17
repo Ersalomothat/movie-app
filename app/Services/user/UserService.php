@@ -2,39 +2,41 @@
 
 namespace App\Services\user;
 
+use App\Models\User;
 use App\Repository\UserRepository;
 
 class UserService implements UserServiceInterface
 {
     private UserRepository $userRepository;
+
     public function __construct(UserRepository $repository)
     {
         $this->userRepository = $repository;
 
     }
 
-    public function create($data)
+    public function create($data): User
     {
-        // TODO: Implement create() method.
+        return $this->userRepository->create($data);
     }
 
-    public function findById($id)
+    public function findById($id) : User
     {
-        // TODO: Implement findById() method.
+       return $this->userRepository->find($id);
     }
 
-    public function findByEmail($email)
+    public function findByEmail($email) :User
     {
-        // TODO: Implement findByEmail() method.
+        return $this->userRepository->findByEmail($email);
     }
 
-    public function getAll()
+    public function getAll():array
     {
-        // TODO: Implement getAll() method.
+        return [];
     }
 
-    public function delete($id)
+    public function delete($id):bool
     {
-       $this->userRepository->delete($id);
+        return $this->userRepository->delete($id);
     }
 }

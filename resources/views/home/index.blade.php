@@ -83,7 +83,9 @@
                                 </div>
                             @endforeach
                         </div>
-
+                        <div class="">
+                            {{$movies->links('pagination::bootstrap-5')}}
+                        </div>
                     </div>
 
                 </div>

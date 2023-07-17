@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Teather extends Model
 {
     use HasFactory;
+    protected $table = 'theaters';
+    protected $fillable = [
+        'theater_name',
+        'theater_location',
+        'seat_capacity'
+    ];
 }

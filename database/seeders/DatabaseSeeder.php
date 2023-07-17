@@ -35,5 +35,9 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+        $this->call([
+            TeatherSeeder::class,
+            ShowTimeSeeder::class
+        ]);
     }
 }
