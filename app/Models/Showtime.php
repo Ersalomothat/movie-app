@@ -10,7 +10,8 @@ class Showtime extends Model
     use HasFactory;
 
     protected $with = [
-        'teather'
+        'teather',
+        'movie'
     ];
 
     protected $fillable = [
@@ -19,5 +20,8 @@ class Showtime extends Model
 
     public function teather() {
         return $this->belongsTo(Teather::class, 'theater_id');
+    }
+    public function movie() {
+        return $this->belongsTo(Movie::class,'movie_id');
     }
 }

@@ -12,7 +12,7 @@
                         <div class="contact-counter-content mt-3">
                             <div class="counter-item">
                                 <h6 class="title my-2">
-                                <p>Rp. 400.000.00</p>
+                                <p>Rp. {{number_format(auth()->user()->balance['amount'])}}</p>
                                 </h6>
                             </div>
                             <button class="btn btn-sm btn-outline-primary border-right-0 border-left-0" type="button">Top up</button>

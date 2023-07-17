@@ -10,17 +10,18 @@
                 <li>
                     <a href="{{route('home')}}" class="{{request()->is('home') ? 'active': ''}}">Home</a>
                 </li>
-{{--                movie-app/movie-detail/movie-id/checkout#0--}}
-
                 <li>
                     <a href="#0" class="{{request()->is('*/movie/*') ? 'active': ''}}">movies</a>
                 </li>
+                @auth
                 <li>
                     <a href="{{route('home.user.profile')}}" class="{{request()->is('*/user/*') ? 'active': ''}}">Profile</a>
                 </li>
+                @else
                 <li class="header-button pr-0">
                     <a href="{{route('auth.sign-up')}}">join us</a>
                 </li>
+                @endauth
             </ul>
             <div class="header-bar d-lg-none">
                 <span></span>

@@ -4,19 +4,22 @@ namespace App\Http\Livewire;
 
 use App\Models\Movie;
 use App\Models\Seat;
+use App\Models\Showtime;
 use Livewire\Component;
 
 class SeatPlan extends Component
 {
     public Movie $movie;
+    public Showtime $showtime;
 
     public $id_seats = array();
 
     public $totalPrice = 0;
 
-    public function mount(Movie $movie): void
+    public function mount(Showtime $showtime, Movie $movie): void
     {
         $this->movie = $movie;
+        $this->showtime = $showtime;
 
         $numOfseat = request()->query('seat_number');
         if ($numOfseat) {
@@ -31,11 +34,12 @@ class SeatPlan extends Component
         if (count($this->id_seats) == 6) {
             return
                 redirect()
-                    ->route('home.movie.movie-detail.seat-plan', [
+                    ->route('home.movie.seat-plan', [
+                        'showtime' => $this->showtime,
                         'movie' => $this->movie,
                         'seat_number' => $this->seatIdsToString()
                     ])
-                    ->with('warning','Number of seats allow to take are six!');
+                    ->with('warning', 'Number of seats allow to take are six!');
         }
         $this->id_seats[] = $id;
 
@@ -57,14 +61,17 @@ class SeatPlan extends Component
     {
         if (($this->id_seats and $this->totalPrice > 0)) {
             return to_route('home.movie.movie-checkout', [
+                'showtime' => $this->showtime,
                 'movie' => $this->movie["id"],
                 'seat_number' => $this->seatIdsToString()
             ]);
         }
         return
             redirect()
-            ->route('home.movie.movie-detail.seat-plan', $this->movie)
-                ->with('warning','You must select at least one seat');
+                ->route('home.movie.seat-plan', [
+                    'showtime' => $this->showtime,
+                    'movie' => $this->movie])
+                ->with('warning', 'You must select at least one seat');
 
     }
 

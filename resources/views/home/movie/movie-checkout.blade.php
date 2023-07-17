@@ -1,6 +1,5 @@
 <x-app-layout title="Movie Checkout">
     @php
-    $movie = request()->movie;
     $seat_number =request()->query('seat_number');
     @endphp
     <!-- ==========Banner-Section========== -->
@@ -9,7 +8,7 @@
         <div class="container">
             <div class="details-banner-wrapper">
                 <div class="details-banner-content style-two">
-                    <h3 class="title">Venus</h3>
+                    <h3 class="title">{{$movie["title"]}}</h3>
                     <div class="tags">
                         <a href="#0">City Walk</a>
                         <a href="#0">English - 2D</a>
@@ -25,7 +24,8 @@
         <div class="container">
             <div class="page-title-area">
                 <div class="item md-order-1">
-                    <a href="{{route('home.movie.movie-detail.seat-plan', [
+                    <a href="{{route('home.movie.seat-plan', [
+                                    'showtime'=>$showtime["id"],
                                     'movie'=>$movie["id"],
                                     'seat_number' => $seat_number
                                                 ])}}" class="custom-button back-button">
@@ -33,22 +33,22 @@
                     </a>
                 </div>
                 <div class="item date-item">
-                    <span class="date">MON, SEP 09 2020</span>
+                    <span class="date">{{$showtime['showtime_date']}}</span>
                     <span class="date">
                     {{request()->query('seat_number')}}
 
                     </span>
-                    <select class="select-bar">
-                        <option value="sc1">09:40</option>
-                        <option value="sc2">13:45</option>
-                        <option value="sc3">15:45</option>
-                        <option value="sc4">19:50</option>
-                    </select>
+{{--                    <select class="select-bar">--}}
+{{--                        <option value="sc1">09:40</option>--}}
+{{--                        <option value="sc2">13:45</option>--}}
+{{--                        <option value="sc3">15:45</option>--}}
+{{--                        <option value="sc4">19:50</option>--}}
+{{--                    </select>--}}
                 </div>
                 <div class="item">
-                    <h5 class="title">05:00</h5>
-                    <p>Mins Left</p>
-                </div>
+{{--                    <h5 class="title">05:00</h5>--}}
+{{--                    <p>Mins Left</p>--}}
+{{--                </div>--}}
             </div>
         </div>
     </section>
@@ -64,7 +64,9 @@
                         <form class="checkout-contact-form" action="{{route('home.user.booking-movie')}}" method="post">
                             @csrf
                             <input type="hidden" name="movie" value="{{$movie}}">
+                            <input type="hidden" name="showtime" value="{{$showtime["id"]}}">
                             <input type="hidden" name="current_url" value="{{\URL::full()}}" />
+                            <input type="hidden" name="seat_number" value="{{$seat_number}}" />
                             <div class="form-group">
                                 <input type="text" required placeholder="Full Name" name="name">
                                 @error('name')
@@ -94,7 +96,12 @@
                 </div>
 {{--                booking summarty--}}
                 <div class="col-lg-4">
-                    <x-utils.booking-summary :title="$movie['title']" :seat_number="$seat_number" :ticket_price="$movie['ticket_price']"/>
+                    <x-utils.booking-summary
+                        :title="$movie['title']"
+                        :seat_number="$seat_number"
+                        :ticket_price="$movie['ticket_price']"
+                        :showtime="$showtime"
+                    />
                 </div>
             </div>
         </div>

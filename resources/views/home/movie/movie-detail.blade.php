@@ -62,8 +62,8 @@
                     </div>
 
                 </div>
-                <a href="{{route('home.movie.movie-detail.seat-plan', $movie["id"])}}" class="custom-button">book
-                    tickets</a>
+{{--                <a href="{{route('home.movie.movie-detail.seat-plan', $movie["id"])}}" class="custom-button">book--}}
+{{--                    tickets</a>--}}
             </div>
         </div>
     </section>
@@ -98,7 +98,8 @@
                                         </div>
                                     </div>
                                     <div class="movie-review-content">
-                                        <a href="" class="custom-button">book tickets</a>
+                                        <a href="{{ route('home.movie.seat-plan', ['showtime' => $show["id"], 'movie' => $movie['id']]) }}" class="custom-button">book tickets</a>
+
                                     </div>
                                 </div>
                                 @endforeach

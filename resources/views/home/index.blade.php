@@ -62,22 +62,22 @@
                                         </div>
                                         <div class="movie-content bg-one">
                                             <h5 class="title m-0">
-                                                <a href="#0">{{$movie["title"]}}</a>
+                                                <a href="{{route('home.movie.detail-movie', $movie["id"])}}">{{$movie["title"]}}</a>
                                             </h5>
-                                            <ul class="movie-rating-percent">
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="/demo/assets/images/movie/tomato.png" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="/demo/assets/images/movie/cake.png" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                            </ul>
+{{--                                            <ul class="movie-rating-percent">--}}
+{{--                                                <li>--}}
+{{--                                                    <div class="thumb">--}}
+{{--                                                        <img src="/demo/assets/images/movie/tomato.png" alt="movie">--}}
+{{--                                                    </div>--}}
+{{--                                                    <span class="content">88%</span>--}}
+{{--                                                </li>--}}
+{{--                                                <li>--}}
+{{--                                                    <div class="thumb">--}}
+{{--                                                        <img src="/demo/assets/images/movie/cake.png" alt="movie">--}}
+{{--                                                    </div>--}}
+{{--                                                    <span class="content">88%</span>--}}
+{{--                                                </li>--}}
+{{--                                            </ul>--}}
                                         </div>
                                     </div>
                                 </div>

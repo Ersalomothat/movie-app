@@ -29,32 +29,35 @@ Route::group([
     Route::delete('logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::controller(MovieController::class)
-        ->prefix('')
+        ->prefix('movie')
         ->as('movie.')
         ->group(function () {
-            Route::get('movie/{movie}/detail', 'movieDetail')->name('detail-movie');
-            Route::get('movie-detail/{movie}/seat-plan', 'movieSeatPlan')->name('movie-detail.seat-plan');
-            Route::get('movie-detail/{movie}/checkout', 'movieCheckout')->name('movie-checkout');
+
+            Route::get('{movie}/detail', 'movieDetail')->name('detail-movie');
+            Route::get('showtime/{showtime}/seat-plan/{movie}/movie', 'movieSeatPlan')->name('seat-plan');
+            Route::get('showtime/{showtime}/checkout/{movie}/movie', 'movieCheckout')->name('movie-checkout');
         });
 
     Route::controller(UserController::class)
         ->prefix('user')
         ->as('user.')
         ->group(function () {
-            Route::get('profile', 'profile')->name('profile');
-            Route::get('balance', 'balance')->name('balance');
-            Route::get('history', 'history')->name('history');
-            Route::post('booking-movie','bookingMovie')->name('booking-movie');
+            Route::middleware(['auth'=>'auth:web'])->group(function () {
+                Route::get('profile', 'profile')->name('profile');
+                Route::get('balance', 'balance')->name('balance');
+                Route::get('history', 'history')->name('history');
+            });
+            Route::post('booking-movie', 'bookingMovie')->name('booking-movie');
         });
 
     Route::controller(\App\Http\Controllers\PaymentController::class)
         ->prefix('payment')
         ->as('payment.')
-        ->group(function (){
-            Route::get('booking/payment', 'payment')->name('payment');
-//            Route::get('{booking}/payment', 'payment')->name('payment');
+        ->group(function () {
+            Route::get('{booking}/payment', 'payment')->name('payment');
+            Route::post('{booking}/payment', 'makePayment')->name('make-payment');
 
 
-    });
+        });
 });
 

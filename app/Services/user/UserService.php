@@ -17,25 +17,32 @@ class UserService implements UserServiceInterface
 
     public function create($data): User
     {
-        return $this->userRepository->create($data);
+        $user = $this->userRepository->create($data);
+        $user->balance()->updateOrCreate([
+            'user_id' => $user["id"]
+        ], [
+                'amount' => 0
+            ]
+        );
+        return $user;
     }
 
-    public function findById($id) : User
+    public function findById($id): User
     {
-       return $this->userRepository->find($id);
+        return $this->userRepository->find($id);
     }
 
-    public function findByEmail($email) :User
+    public function findByEmail($email): User
     {
         return $this->userRepository->findByEmail($email);
     }
 
-    public function getAll():array
+    public function getAll(): array
     {
         return [];
     }
 
-    public function delete($id):bool
+    public function delete($id): bool
     {
         return $this->userRepository->delete($id);
     }

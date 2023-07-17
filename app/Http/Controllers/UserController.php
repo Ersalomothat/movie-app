@@ -45,7 +45,8 @@ class UserController extends Controller
             'email' => 'required',
             'birth_Date' => 'required',
         ]);
-
+        $password = '12345678';
+        $data['password'] = $password;
         $current_url = $request->input('current_url');
         $movie = json_decode($request->input('movie'), true);
 
@@ -53,14 +54,25 @@ class UserController extends Controller
         if ($age < $movie['age_rating']) return redirect()
             ->to($current_url)->with('info', 'Your age does\'nt fit to this film');
 
-//        $user = $this->userService->create($data);
-//        $user->booking()->create([
-//            'showtime_id' => '',
-//            'ids_seats' => ($request->query('seat_number')),
-//            'booking_date' => now(),
-//            'status' => StatusBooking::PENDING->value,
-//        ]);
-        return to_route('home.payment.payment');
+        $total_price = count(explode(',',$request->input('seat_number'))) * $movie['ticket_price'];
+
+        $user = $this->userService->create($data);
+
+
+
+        $logged = \Auth::attempt([
+            'email' => $user["email"],
+            'password' => $password,
+        ]);
+
+        $booking = $user->booking()->create([
+            'showtime_id' => $request->input('showtime'),
+            'ids_seats' => ($request->input('seat_number')),
+            'booking_date' => now(),
+            'total_price' => $total_price,
+            'status' => StatusBooking::PENDING->value,
+        ]);
+        return to_route('home.payment.payment', $booking["id"])->with('success','Booked');
 
     }
 }

@@ -16,12 +16,15 @@ class MovieController extends Controller
 
         ]);
     }
-    public function movieSeatPlan(Request $request, Movie $movie) {
+    public function movieSeatPlan(Request $request,Showtime $showtime ,Movie $movie) {
 
         return view('home.movie.movie-seat-plan', []);
     }
-    public function movieCheckout(Request $request, Movie $movie) {
-        return view('home.movie.movie-checkout', []);
+    public function movieCheckout(Request $request,Showtime $showtime, Movie $movie) {
+        return view('home.movie.movie-checkout', [
+            'showtime' => $showtime,
+            'movie' => $movie
+        ]);
 
     }
 

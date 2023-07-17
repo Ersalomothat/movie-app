@@ -1,7 +1,8 @@
 @props([
     'title',
     'seat_number',
-    'ticket_price'
+    'ticket_price',
+    'showtime'
 ])
 
 <div class="booking-summery bg-one">
@@ -12,8 +13,9 @@
             <span class="info">English-2d</span>
         </li>
         <li>
-            <h6 class="subtitle"><span>City Walk</span><span>02</span></h6>
-            <div class="info"><span>10 SEP TUE, 11:00 PM</span> <span>Tickets</span></div>
+            <h6 class="subtitle"><span>Location</span></h6>
+            <div class="info"><span>{{__($showtime->teather["theater_name"])}} | {{__($showtime->teather["theater_location"])}}</span></div>
+            <div class="info"><span>{{$showtime["showtime_date"]}}</span> <span>Tickets</span></div>
         </li>
 
     </ul>

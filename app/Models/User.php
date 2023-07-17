@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -22,6 +23,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'birth_Date',
         'email',
         'password',
     ];
@@ -46,13 +48,17 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function balance():HasOne {
+        return $this->hasOne(Balance::class,'user_id');
+    }
     public function booking():HasMany {
         return $this->hasMany(Booking::class,'user_id');
     }
 
     public function password():Attribute {
+
         return Attribute::make(
-            set: fn($pwd) => $pwd ? bcrypt($pwd) : bcrypt(Str::random(8)),
+            set: fn($pwd) => bcrypt($pwd),
         );
     }
 }

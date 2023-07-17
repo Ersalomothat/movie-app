@@ -23,6 +23,7 @@ return new class extends Migration {
                 ->cascadeOnUpdate();
 
             $table->string('ids_seats',128);
+            $table->integer('total_price');
             $table->timestamp('booking_date');
             $table->string('status')->default(\App\Enum\StatusBooking::PENDING->value);// 'paid // 'canceled
             $table->timestamps();
