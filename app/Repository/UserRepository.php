@@ -17,9 +17,9 @@ class UserRepository
     {
         return User::find($id);
     }
-    public function findByEmail(string $email):User
+    public function findByEmail(string $email)
     {
-        return User::whereEmail($email)->first();
+        return $this->user->whereEmail($email)->first();
     }
 
     public function create($user): User

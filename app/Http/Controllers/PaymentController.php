@@ -11,16 +11,23 @@ class PaymentController extends Controller
 {
     public function payment(Request $request, Booking $booking)
     {
+        $ticket_price = $booking->showtime->movie["ticket_price"];
         $detail = [
             'booking_id' => $booking["id"],
             'title' => $booking->showtime->movie["title"],
             'seat_number' => $booking->ids_seats,
-            'ticket_price' => $booking->showtime->movie["ticket_price"],
+            'ticket_price' => $ticket_price,
             'showtime' => $booking->showtime
         ];
+
+        $user = User::whereId($booking->user_id)->first();
+
+        $canPay = $user->balance['amount'] >= count(explode(",",$booking["ids_seats"])) * $ticket_price;
+
         return view('home.payment.payment', [
             'detail' => $detail,
-            'user' => User::whereId($booking->user_id)->first()
+            'user' => $user,
+            'canPay' => $canPay
         ]);
     }
 

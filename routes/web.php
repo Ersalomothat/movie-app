@@ -46,6 +46,7 @@ Route::group([
                 Route::get('profile', 'profile')->name('profile');
                 Route::get('balance', 'balance')->name('balance');
                 Route::get('history', 'history')->name('history');
+                Route::post('top-up', 'topUp')->name('topUp');
             });
             Route::post('booking-movie', 'bookingMovie')->name('booking-movie');
         });

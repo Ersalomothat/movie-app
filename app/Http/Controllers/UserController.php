@@ -54,11 +54,9 @@ class UserController extends Controller
         if ($age < $movie['age_rating']) return redirect()
             ->to($current_url)->with('info', 'Your age does\'nt fit to this film');
 
-        $total_price = count(explode(',',$request->input('seat_number'))) * $movie['ticket_price'];
+        $total_price = count(explode(',', $request->input('seat_number'))) * $movie['ticket_price'];
 
         $user = $this->userService->create($data);
-
-
 
         $logged = \Auth::attempt([
             'email' => $user["email"],
@@ -72,7 +70,33 @@ class UserController extends Controller
             'total_price' => $total_price,
             'status' => StatusBooking::PENDING->value,
         ]);
-        return to_route('home.payment.payment', $booking["id"])->with('success','Booked');
+        return to_route('home.payment.payment', $booking["id"])->with('success', 'Booked');
 
+    }
+
+    public function topUp(Request $request)
+    {
+        $max_amount = '10000000';
+        $request->validate([
+            'amount' => 'required|numeric|max:' . $max_amount,
+        ]);
+        $user = auth()->user();
+        $amount = $request->input('amount');
+        $current_amount = $user->balance['amount'];
+
+        $addingAmount = $current_amount + $amount;
+
+        if (  $addingAmount > intval($max_amount)) {
+            return back()->with('success', 'Limit amount is ten million');
+        }
+
+        $user->balance()->update([
+            'amount' => $addingAmount,
+        ], [
+            'amount.numeric' => 'number only :)',
+            'amount.max' => 'Not more than 1 million'
+        ]);
+
+        return back()->with('success', 'Top up successfully :) 👍');
     }
 }

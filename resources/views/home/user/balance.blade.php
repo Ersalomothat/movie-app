@@ -8,14 +8,15 @@
             <div class="row justify-content-center mt-2">
                 <div class="col-sm-8 col-md-6">
                     <div class="contact-counter-item">
-                            <img src="/demo/icon/wallet-icon.png" width="60px" alt="contact">
+                        <img src="/demo/icon/wallet-icon.png" width="60px" alt="contact">
                         <div class="contact-counter-content mt-3">
                             <div class="counter-item">
                                 <h6 class="title my-2">
-                                <p>Rp. {{number_format(auth()->user()->balance['amount'])}}</p>
+                                    <p>Rp. {{number_format(auth()->user()->balance['amount'])}}</p>
                                 </h6>
                             </div>
-                            <button class="btn btn-sm btn-outline-primary border-right-0 border-left-0" type="button">Top up</button>
+                            <a href="javascript::void();" class="custom-button" data-toggle="modal"
+                               data-target="#staticBackdrop"> Top up</a>
                         </div>
                     </div>
                 </div>
@@ -23,4 +24,5 @@
         </div>
 
     </div>
+    <x-utils.modal-top-up/>
 @stop

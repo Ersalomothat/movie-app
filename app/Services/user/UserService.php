@@ -17,13 +17,12 @@ class UserService implements UserServiceInterface
 
     public function create($data): User
     {
-        $user = $this->userRepository->create($data);
-        $user->balance()->updateOrCreate([
-            'user_id' => $user["id"]
-        ], [
+        if (!$user = $this->userRepository->findByEmail($data["email"])) {
+            $user = $this->userRepository->create($data);
+            $user->balance()->create([
                 'amount' => 0
-            ]
-        );
+            ]);
+        }
         return $user;
     }
 

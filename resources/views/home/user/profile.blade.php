@@ -10,17 +10,18 @@
                             <div class="form-group">
                                 <label for="name">Name <span>*</span></label>
                                 <input type="text" placeholder="Enter Your Full Name" name="name"
-                                       id="name" required="" value="Ersalomo">
+                                       id="name" required="" value="{{auth()->user()->name}}">
                             </div>
                             <div class="form-group">
                                 <label for="email">Email <span>*</span></label>
                                 <input type="text" placeholder="Enter Your Email" name="email"
-                                       id="email" required="" value="ersalomo@gmai.com">
+                                       id="email" required="" value="{{auth()->user()->email}}">
                             </div>
                             <div class="form-group">
-                                <label for="subject">Birth of Date <span>*</span></label>
-                                <input type="date" placeholder="Enter Your Subject" name="subject"
-                                       id="subject" required="">
+                                <label for="subject">Age<span>*</span></label>
+                                <input type="text" placeholder="Enter Your Subject" name="subject"
+                                       id="subject" required="" disabled
+                                       value="{{get_age(auth()->user()['birth_date']). " years old"}}">
                             </div>
                             <div class="form-group">
                                 <input type="submit" value="save changes">
