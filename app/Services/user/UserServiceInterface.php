@@ -10,4 +10,6 @@ interface UserServiceInterface
     public function findByEmail($email):User;
     public function getAll():array;
     public function delete($id):bool;
+    public function logIn($email, $password):bool;
+
 }

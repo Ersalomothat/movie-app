@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enum\StatusBooking;
+use App\Models\Seat;
 use App\Services\user\UserService;
 use App\Services\user\UserServiceInterface;
 use Illuminate\Http\Request;
@@ -47,6 +48,7 @@ class UserController extends Controller
         ]);
         $password = '12345678';
         $data['password'] = $password;
+
         $current_url = $request->input('current_url');
         $movie = json_decode($request->input('movie'), true);
 
@@ -57,20 +59,23 @@ class UserController extends Controller
         $total_price = count(explode(',', $request->input('seat_number'))) * $movie['ticket_price'];
 
         $user = $this->userService->create($data);
+        $logged = $this->userService->logIn($user["email"], $password);
 
-        $logged = \Auth::attempt([
-            'email' => $user["email"],
-            'password' => $password,
-        ]);
+        if ($logged) {
+            $booking = $user->booking()->create([
+                'showtime_id' => $request->input('showtime'),
+                'ids_seats' => ($request->input('seat_number')),
+                'booking_date' => now(),
+                'total_price' => $total_price,
+                'status' => StatusBooking::PENDING->value,
+            ]);
+            Seat::whereIn('seat_number', explode(",",$request->input('seat_number')))->update([
+                'is_available' => 0
+            ]);
 
-        $booking = $user->booking()->create([
-            'showtime_id' => $request->input('showtime'),
-            'ids_seats' => ($request->input('seat_number')),
-            'booking_date' => now(),
-            'total_price' => $total_price,
-            'status' => StatusBooking::PENDING->value,
-        ]);
-        return to_route('home.payment.payment', $booking["id"])->with('success', 'Booked');
+            return to_route('home.payment.payment', $booking["id"])->with('success', 'Added to Booked payment');
+        }
+        return back()->with('error', 'FAIL');
 
     }
 
@@ -86,7 +91,7 @@ class UserController extends Controller
 
         $addingAmount = $current_amount + $amount;
 
-        if (  $addingAmount > intval($max_amount)) {
+        if ($addingAmount > intval($max_amount)) {
             return back()->with('success', 'Limit amount is ten million');
         }
 
@@ -99,4 +104,5 @@ class UserController extends Controller
 
         return back()->with('success', 'Top up successfully :) 👍');
     }
+
 }

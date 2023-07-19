@@ -14,7 +14,7 @@
                                 <li class="front-seat">
                                     <ul>
                                         <li class="single-seat">
-                                            @if($seat['is_available'])
+                                            @if(!$seat['is_available'])
                                                 {{--booked--}}
                                                 <img src="/demo/assets/images/movie/seat01-free.png" alt="seat">
                                             @elseif(in_array($seat["id"], $this->id_seats))

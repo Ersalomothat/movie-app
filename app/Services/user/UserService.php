@@ -45,4 +45,12 @@ class UserService implements UserServiceInterface
     {
         return $this->userRepository->delete($id);
     }
+
+    public function logIn($email, $password):bool
+    {
+        return \Auth::attempt([
+            'email' => $email,
+            'password' => $password
+        ]);
+    }
 }

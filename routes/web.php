@@ -16,9 +16,9 @@ Route::group([
 ], function () {
     Route::controller(AuthController::class)->group(function () {
         Route::view('sign-in', 'auth.sign-in')->name('sign-in');
-        Route::post('sign-in', 'signIn');
+        Route::post('sign-in', 'signIn')->name('sign-in');
         Route::view('sign-up', 'auth.sign-up')->name('sign-up');
-        Route::post('sign-up', 'signUp');
+        Route::post('sign-up', 'signUp')->name('sign-up');
     });
 });
 
@@ -26,8 +26,7 @@ Route::group([
     'prefix' => 'movie-app',
     'as' => 'home.'
 ], function () {
-    Route::delete('logout', [AuthController::class, 'logout'])->name('logout');
-
+    Route::delete('logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:web');
     Route::controller(MovieController::class)
         ->prefix('movie')
         ->as('movie.')
@@ -47,6 +46,7 @@ Route::group([
                 Route::get('balance', 'balance')->name('balance');
                 Route::get('history', 'history')->name('history');
                 Route::post('top-up', 'topUp')->name('topUp');
+                Route::post('logout', 'logout')->name('logout');
             });
             Route::post('booking-movie', 'bookingMovie')->name('booking-movie');
         });
