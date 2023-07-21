@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Enum\StatusBooking;
 use App\Models\Movie;
 use App\Models\Seat;
 use App\Models\Showtime;
@@ -59,7 +60,27 @@ class SeatPlan extends Component
 
     public function proceed()
     {
+
         if (($this->id_seats and $this->totalPrice > 0)) {
+            // logged in user
+            if (auth()->check()) {
+                $seat_num = arrayToStr($this->id_seats);
+                $booking = auth()->user()->booking()->create([
+                    'showtime_id' => $this->showtime["id"],
+                    'ids_seats' => $seat_num,
+                    'booking_date' => now(),
+                    'total_price' => $this->totalPrice,
+                    'status' => StatusBooking::PENDING->value,
+                ]);
+
+                Seat::whereIn('seat_number', explode(",", $seat_num))->update([
+                    'is_available' => 0
+                ]);
+
+                return to_route('home.payment.payment', $booking["id"])->with('success', 'Added to Booked payment');
+
+            }
+
             return to_route('home.movie.movie-checkout', [
                 'showtime' => $this->showtime,
                 'movie' => $this->movie["id"],
@@ -70,7 +91,8 @@ class SeatPlan extends Component
             redirect()
                 ->route('home.movie.seat-plan', [
                     'showtime' => $this->showtime,
-                    'movie' => $this->movie])
+                    'movie' => $this->movie
+                ])
                 ->with('warning', 'You must select at least one seat');
 
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enum\StatusBooking;
+use App\Models\Booking;
 use App\Models\Seat;
 use App\Services\user\UserService;
 use App\Services\user\UserServiceInterface;
@@ -35,7 +36,8 @@ class UserController extends Controller
     public function history(Request $request)
     {
         return view('home.user.history', [
-            'title' => 'History'
+            'title' => 'History',
+            'histories' => Booking::whereUserId(auth()->id())->get()
         ]);
     }
 
@@ -46,20 +48,23 @@ class UserController extends Controller
             'email' => 'required',
             'birth_Date' => 'required',
         ]);
+
         $password = '12345678';
         $data['password'] = $password;
 
-        $current_url = $request->input('current_url');
         $movie = json_decode($request->input('movie'), true);
-
-        $age = get_age($data['birth_Date']);
-        if ($age < $movie['age_rating']) return redirect()
-            ->to($current_url)->with('info', 'Your age does\'nt fit to this film');
-
-        $total_price = count(explode(',', $request->input('seat_number'))) * $movie['ticket_price'];
 
         $user = $this->userService->create($data);
         $logged = $this->userService->logIn($user["email"], $password);
+        $age = get_age($user['birth_Date']);
+
+        if ($age < $movie['age_rating']) {
+            $current_url = $request->input('current_url');
+            return redirect()
+                ->to($current_url)->with('info', 'Your age does\'nt fit to this film');
+        }
+
+        $total_price = count(explode(',', $request->input('seat_number'))) * $movie['ticket_price'];
 
         if ($logged) {
             $booking = $user->booking()->create([
@@ -69,7 +74,7 @@ class UserController extends Controller
                 'total_price' => $total_price,
                 'status' => StatusBooking::PENDING->value,
             ]);
-            Seat::whereIn('seat_number', explode(",",$request->input('seat_number')))->update([
+            Seat::whereIn('seat_number', explode(",", $request->input('seat_number')))->update([
                 'is_available' => 0
             ]);
 
