@@ -34,70 +34,77 @@ class SeatPlan extends Component
                     return $item !== null && $item !== '';
                 }));
         }
-        $numOfseat = request()->query('seat_number');
-        if ($numOfseat) {
-            $this->id_seats = explode(",", $numOfseat);
+        if ($seat_number = request()->query('seat_number')) {
+            $this->id_seats = explode(",", $seat_number);
         }
-        $this->totalPrice = $this->movie->ticket_price * count($this->id_seats);;
+
+        $this->setTotalPrice($this->movie->ticket_price, count($this->id_seats));
 
     }
 
     public function selectSeat($id)
     {
 
-        if (count($this->id_seats) == 6) {
+        if (count($this->id_seats) >= 6) {
             return
-                redirect()
-                    ->route('home.movie.seat-plan', [
-                        'showtime' => $this->showtime,
-                        'movie' => $this->movie,
-                        'seat_number' => $this->seatIdsToString()
-                    ])
+                redirect()->route('home.movie.seat-plan', [
+                    'showtime' => $this->showtime,
+                    'movie' => $this->movie,
+                    'seat_number' => $this->seatIdsToString()
+                ])
                     ->with('warning', 'Number of seats allow to take are six!');
         }
-        $this->id_seats[] = $id;
 
-        $this->totalPrice = $this->movie->ticket_price * count($this->id_seats);;
+        if (!in_array($id, $this->id_seats)) {
+            $this->id_seats[] = $id;
+            $this->setTotalPrice($this->movie->ticket_price, count($this->id_seats));
+        }
     }
 
-    public function changeSeat($id)
-    {
-        foreach ($this->id_seats as $idx => $id_seat) {
-            if ($id == $id_seat) {
-                unset($this->id_seats[$idx]);
-            }
-        }
-        $this->totalPrice -= $this->movie->ticket_price;
 
+    public function setTotalPrice($price, $count): void
+    {
+        $this->totalPrice = $price * $count;
+    }
+
+    public function changeSeat($id):void
+
+    {
+        $idx = array_search($id, $this->id_seats);
+        if ($idx !== false) { // idx = false do nothing
+            unset($this->id_seats[$idx]);
+            $this->totalPrice -= $this->movie->ticket_price;
+        }
     }
 
     public function proceed()
     {
-        if (($this->id_seats and $this->totalPrice > 0)) {
+        $hasSelectedSeats = !empty($this->id_seats) && $this->totalPrice > 0;
+        if ($hasSelectedSeats) {
             // logged in user
             if (auth()->check()) {
-                $seat_num = arrayToStr($this->id_seats);
                 $user = auth()->user();
-                $booking = Booking::where('user_id', $user["id"])->where('showtime_id',$this->showtime["id"])->first();
-                $booking = $booking->updateOrCreate([
-                    'user_id' => $user["id"],
+                $booking = Booking::where('user_id', $user["id"])->where('showtime_id', $this->showtime["id"])->first();
+                $bookingData = [
                     'showtime_id' => $this->showtime["id"],
-                ], [
-                    'showtime_id' => $this->showtime["id"],
-                    'ids_seats' => $seat_num,
+                    'ids_seats' => arrayToStr($this->id_seats),
                     'booking_date' => now(),
                     'total_price' => $this->totalPrice,
-                    'status' => $booking->status == 'paid' ? StatusBooking::PAID->value : StatusBooking::PENDING->value,
-                ]);
+                    'status' => $booking && $booking->status == 'paid' ? StatusBooking::PAID->value : StatusBooking::PENDING->value,
+                ];
 
-                Seat::whereIn('seat_number', explode(",", $seat_num))->update([
+                if ($booking) {
+                    $booking->update($bookingData);
+                } else {
+                    $booking = $user->booking()->create($bookingData);
+                }
+                Seat::whereIn('seat_number', explode(",", $bookingData["ids_seats"]))->update([
                     'is_available' => 0
                 ]);
 
                 return to_route('home.payment.payment', $booking["id"])->with('success', 'Added to Booked payment');
 
             }
-
             return to_route('home.movie.movie-checkout', [
                 'showtime' => $this->showtime,
                 'movie' => $this->movie["id"],
@@ -105,11 +112,10 @@ class SeatPlan extends Component
             ]);
         }
         return
-            redirect()
-                ->route('home.movie.seat-plan', [
-                    'showtime' => $this->showtime,
-                    'movie' => $this->movie
-                ])
+            redirect()->route('home.movie.seat-plan', [
+                'showtime' => $this->showtime,
+                'movie' => $this->movie
+            ])
                 ->with('warning', 'You must select at least one seat');
 
     }
