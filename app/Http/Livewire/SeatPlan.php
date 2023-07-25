@@ -3,10 +3,12 @@
 namespace App\Http\Livewire;
 
 use App\Enum\StatusBooking;
+use App\Models\Booking;
 use App\Models\Movie;
 use App\Models\Seat;
 use App\Models\Showtime;
 use Livewire\Component;
+use function Symfony\Component\String\u;
 
 class SeatPlan extends Component
 {
@@ -22,6 +24,16 @@ class SeatPlan extends Component
         $this->movie = $movie;
         $this->showtime = $showtime;
 
+        if (auth()->check()) {
+            $booking = Booking::where('showtime_id', $showtime["id"])
+                ->where('user_id', auth()->id())->first();
+
+            $this->id_seats = array_values(
+                array_filter(
+                    explode(",", $booking["ids_seats"] ?? ""), function ($item) {
+                    return $item !== null && $item !== '';
+                }));
+        }
         $numOfseat = request()->query('seat_number');
         if ($numOfseat) {
             $this->id_seats = explode(",", $numOfseat);
@@ -32,6 +44,7 @@ class SeatPlan extends Component
 
     public function selectSeat($id)
     {
+
         if (count($this->id_seats) == 6) {
             return
                 redirect()
@@ -60,17 +73,21 @@ class SeatPlan extends Component
 
     public function proceed()
     {
-
         if (($this->id_seats and $this->totalPrice > 0)) {
             // logged in user
             if (auth()->check()) {
                 $seat_num = arrayToStr($this->id_seats);
-                $booking = auth()->user()->booking()->create([
+                $user = auth()->user();
+                $booking = Booking::where('user_id', $user["id"])->where('showtime_id',$this->showtime["id"])->first();
+                $booking = $booking->updateOrCreate([
+                    'user_id' => $user["id"],
+                    'showtime_id' => $this->showtime["id"],
+                ], [
                     'showtime_id' => $this->showtime["id"],
                     'ids_seats' => $seat_num,
                     'booking_date' => now(),
                     'total_price' => $this->totalPrice,
-                    'status' => StatusBooking::PENDING->value,
+                    'status' => $booking->status == 'paid' ? StatusBooking::PAID->value : StatusBooking::PENDING->value,
                 ]);
 
                 Seat::whereIn('seat_number', explode(",", $seat_num))->update([

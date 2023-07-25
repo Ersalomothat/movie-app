@@ -75,7 +75,7 @@
                                             </div>
                                             <div class="movie-content bg-one">
                                                 <h5 class="title">
-                                                    <a href="movie-details.html">{{$booking->showtime->movie['title']}}</a>
+                                                    <a href="{{route('home.movie.detail-movie',$booking->showtime["movie"]["id"])}}">{{$booking->showtime->movie['title']}}</a>
                                                 </h5>
                                                 <p class="duration">2hrs 50 min</p>
                                                 <div class="release">

@@ -12,8 +12,13 @@ class HomeController extends Controller
      */
     public function __invoke(Request $request)
     {
-        return view('home.index',[
-            'movies' => Movie::paginate(20),
+        $movies = Movie::query();
+
+        if ($q = $request->query("q")) $movies->search($q);
+
+        return view('home.index', [
+            'movies' => $movies->paginate(20),
+            'q' => $q
         ]);
     }
 }

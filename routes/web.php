@@ -33,8 +33,8 @@ Route::group([
         ->group(function () {
 
             Route::get('{movie}/detail', 'movieDetail')->name('detail-movie');
-            Route::get('showtime/{showtime}/seat-plan/{movie}/movie', 'movieSeatPlan')->name('seat-plan');
-            Route::get('showtime/{showtime}/checkout/{movie}/movie', 'movieCheckout')->name('movie-checkout');
+            Route::get('showtime/{showtime}/seat-plan/{movie}', 'movieSeatPlan')->name('seat-plan');
+            Route::get('showtime/{showtime}/checkout/{movie}', 'movieCheckout')->name('movie-checkout');
         });
 
     Route::controller(UserController::class)
@@ -55,7 +55,7 @@ Route::group([
         ->prefix('payment')
         ->as('payment.')
         ->group(function () {
-            Route::get('{booking}/payment', 'payment')->name('payment');
+            Route::get('booking/{booking}', 'payment')->name('payment');
             Route::post('{booking}/payment', 'makePayment')->name('make-payment');
 
 

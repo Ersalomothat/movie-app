@@ -36,6 +36,7 @@ class MovieController extends Controller
 
     public function movieCheckout(Request $request, Showtime $showtime, Movie $movie)
     {
+
         return view('home.movie.movie-checkout', [
             'showtime' => $showtime,
             'movie' => $movie

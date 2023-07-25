@@ -33,8 +33,14 @@
                     <div class="tab-item active">
                         <form class="ticket-search-form">
                             <div class="form-group large">
-                                <input type="text" placeholder="Search for Movies">
+                                <input type="text" name="q" value="{{$q}}" placeholder="Search for Movies">
                                 <button type="submit"><i class="fas fa-search"></i></button>
+                            </div>
+                            <div class="form-group">
+                            </div>
+                            <div class="form-group">
+                            </div>
+                            <div class="form-group">
                             </div>
                         </form>
                     </div>
@@ -52,7 +58,7 @@
                             <h2 class="title">movies</h2>
                         </div>
                         <div class="row mb-30-none justify-content-center">
-                            @foreach($movies as $movie)
+                            @forelse($movies as $movie)
                                 <div class="col-sm-4 col-lg-3">
                                     <div class="movie-grid">
                                         <div class="movie-thumb c-thumb">
@@ -64,27 +70,17 @@
                                             <h5 class="title m-0">
                                                 <a href="{{route('home.movie.detail-movie', $movie["id"])}}">{{$movie["title"]}}</a>
                                             </h5>
-{{--                                            <ul class="movie-rating-percent">--}}
-{{--                                                <li>--}}
-{{--                                                    <div class="thumb">--}}
-{{--                                                        <img src="/demo/assets/images/movie/tomato.png" alt="movie">--}}
-{{--                                                    </div>--}}
-{{--                                                    <span class="content">88%</span>--}}
-{{--                                                </li>--}}
-{{--                                                <li>--}}
-{{--                                                    <div class="thumb">--}}
-{{--                                                        <img src="/demo/assets/images/movie/cake.png" alt="movie">--}}
-{{--                                                    </div>--}}
-{{--                                                    <span class="content">88%</span>--}}
-{{--                                                </li>--}}
-{{--                                            </ul>--}}
                                         </div>
                                     </div>
                                 </div>
-                            @endforeach
+                            @empty
+                                <div>
+                                    No movie found
+                                </div>
+                            @endforelse
                         </div>
                         <div class="">
-                            {{$movies->links('pagination::bootstrap-5')}}
+                            {{$movies->appends(["q" => $q])->links('pagination::bootstrap-5')}}
                         </div>
                     </div>
 
@@ -93,213 +89,3 @@
         </div>
     </section>
 </x-app-layout>
-{{--<div class="col-sm-4 col-lg-3">--}}
-{{--    <div class="movie-grid">--}}
-{{--        <div class="movie-thumb c-thumb">--}}
-{{--            <a href="#0">--}}
-{{--                <img src="/demo/assets/images/movie/movie01.jpg" alt="movie">--}}
-{{--            </a>--}}
-{{--        </div>--}}
-{{--        <div class="movie-content bg-one">--}}
-{{--            <h5 class="title m-0">--}}
-{{--                <a href="#0">alone</a>--}}
-{{--            </h5>--}}
-{{--            <ul class="movie-rating-percent">--}}
-{{--                <li>--}}
-{{--                    <div class="thumb">--}}
-{{--                        <img src="/demo/assets/images/movie/tomato.png" alt="movie">--}}
-{{--                    </div>--}}
-{{--                    <span class="content">88%</span>--}}
-{{--                </li>--}}
-{{--                <li>--}}
-{{--                    <div class="thumb">--}}
-{{--                        <img src="/demo/assets/images/movie/cake.png" alt="movie">--}}
-{{--                    </div>--}}
-{{--                    <span class="content">88%</span>--}}
-{{--                </li>--}}
-{{--            </ul>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</div>--}}
-{{--<div class="col-sm-4 col-lg-3">--}}
-{{--    <div class="movie-grid">--}}
-{{--        <div class="movie-thumb c-thumb">--}}
-{{--            <a href="#0">--}}
-{{--                <img src="/demo/assets/images/movie/movie02.jpg" alt="movie">--}}
-{{--            </a>--}}
-{{--        </div>--}}
-{{--        <div class="movie-content bg-one">--}}
-{{--            <h5 class="title m-0">--}}
-{{--                <a href="#0">mars</a>--}}
-{{--            </h5>--}}
-{{--            <ul class="movie-rating-percent">--}}
-{{--                <li>--}}
-{{--                    <div class="thumb">--}}
-{{--                        <img src="/demo/assets/images/movie/tomato.png" alt="movie">--}}
-{{--                    </div>--}}
-{{--                    <span class="content">88%</span>--}}
-{{--                </li>--}}
-{{--                <li>--}}
-{{--                    <div class="thumb">--}}
-{{--                        <img src="/demo/assets/images/movie/cake.png" alt="movie">--}}
-{{--                    </div>--}}
-{{--                    <span class="content">88%</span>--}}
-{{--                </li>--}}
-{{--            </ul>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</div>--}}
-{{--<div class="col-sm-4 col-lg-3">--}}
-{{--    <div class="movie-grid">--}}
-{{--        <div class="movie-thumb c-thumb">--}}
-{{--            <a href="#0">--}}
-{{--                <img src="/demo/assets/images/movie/movie03.jpg" alt="movie">--}}
-{{--            </a>--}}
-{{--        </div>--}}
-{{--        <div class="movie-content bg-one">--}}
-{{--            <h5 class="title m-0">--}}
-{{--                <a href="#0">venus</a>--}}
-{{--            </h5>--}}
-{{--            <ul class="movie-rating-percent">--}}
-{{--                <li>--}}
-{{--                    <div class="thumb">--}}
-{{--                        <img src="/demo/assets/images/movie/tomato.png" alt="movie">--}}
-{{--                    </div>--}}
-{{--                    <span class="content">88%</span>--}}
-{{--                </li>--}}
-{{--                <li>--}}
-{{--                    <div class="thumb">--}}
-{{--                        <img src="/demo/assets/images/movie/cake.png" alt="movie">--}}
-{{--                    </div>--}}
-{{--                    <span class="content">88%</span>--}}
-{{--                </li>--}}
-{{--            </ul>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</div>--}}
-{{--<div class="col-sm-4 col-lg-3">--}}
-{{--    <div class="event-grid">--}}
-{{--        <div class="movie-thumb c-thumb">--}}
-{{--            <a href="#0">--}}
-{{--                <img src="/demo/assets/images/event/event01.jpg" alt="event">--}}
-{{--            </a>--}}
-{{--            <div class="event-date">--}}
-{{--                <h6 class="date-title">28</h6>--}}
-{{--                <span>Dec</span>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--        <div class="movie-content bg-one">--}}
-{{--            <h5 class="title m-0">--}}
-{{--                <a href="#0">Digital Economy Conference 2020</a>--}}
-{{--            </h5>--}}
-{{--            <div class="movie-rating-percent">--}}
-{{--                <span>327 Montague Street</span>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</div>--}}
-{{--<div class="col-sm-4 col-lg-3">--}}
-{{--    <div class="event-grid">--}}
-{{--        <div class="movie-thumb c-thumb">--}}
-{{--            <a href="#0">--}}
-{{--                <img src="/demo/assets/images/event/event02.jpg" alt="event">--}}
-{{--            </a>--}}
-{{--            <div class="event-date">--}}
-{{--                <h6 class="date-title">28</h6>--}}
-{{--                <span>Dec</span>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--        <div class="movie-content bg-one">--}}
-{{--            <h5 class="title m-0">--}}
-{{--                <a href="#0">web design conference 2020</a>--}}
-{{--            </h5>--}}
-{{--            <div class="movie-rating-percent">--}}
-{{--                <span>327 Montague Street</span>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</div>--}}
-{{--<div class="col-sm-4 col-lg-3">--}}
-{{--    <div class="event-grid">--}}
-{{--        <div class="movie-thumb c-thumb">--}}
-{{--            <a href="#0">--}}
-{{--                <img src="/demo/assets/images/event/event03.jpg" alt="event">--}}
-{{--            </a>--}}
-{{--            <div class="event-date">--}}
-{{--                <h6 class="date-title">28</h6>--}}
-{{--                <span>Dec</span>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--        <div class="movie-content bg-one">--}}
-{{--            <h5 class="title m-0">--}}
-{{--                <a href="#0">digital thinkers meetup</a>--}}
-{{--            </h5>--}}
-{{--            <div class="movie-rating-percent">--}}
-{{--                <span>327 Montague Street</span>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</div>--}}
-{{--<div class="col-sm-4 col-lg-3">--}}
-{{--    <div class="sports-grid">--}}
-{{--        <div class="movie-thumb c-thumb">--}}
-{{--            <a href="#0">--}}
-{{--                <img src="/demo/assets/images/sports/sports01.jpg" alt="sports">--}}
-{{--            </a>--}}
-{{--            <div class="event-date">--}}
-{{--                <h6 class="date-title">28</h6>--}}
-{{--                <span>Dec</span>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--        <div class="movie-content bg-one">--}}
-{{--            <h5 class="title m-0">--}}
-{{--                <a href="#0">football league tournament</a>--}}
-{{--            </h5>--}}
-{{--            <div class="movie-rating-percent">--}}
-{{--                <span>327 Montague Street</span>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</div>--}}
-{{--<div class="col-sm-4 col-lg-3">--}}
-{{--    <div class="sports-grid">--}}
-{{--        <div class="movie-thumb c-thumb">--}}
-{{--            <a href="#0">--}}
-{{--                <img src="/demo/assets/images/sports/sports02.jpg" alt="sports">--}}
-{{--            </a>--}}
-{{--            <div class="event-date">--}}
-{{--                <h6 class="date-title">28</h6>--}}
-{{--                <span>Dec</span>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--        <div class="movie-content bg-one">--}}
-{{--            <h5 class="title m-0">--}}
-{{--                <a href="#0">world cricket league 2020</a>--}}
-{{--            </h5>--}}
-{{--            <div class="movie-rating-percent">--}}
-{{--                <span>327 Montague Street</span>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</div>--}}
-{{--<div class="col-sm-4 col-lg-3">--}}
-{{--    <div class="sports-grid">--}}
-{{--        <div class="movie-thumb c-thumb">--}}
-{{--            <a href="#0">--}}
-{{--                <img src="/demo/assets/images/sports/sports03.jpg" alt="sports">--}}
-{{--            </a>--}}
-{{--            <div class="event-date">--}}
-{{--                <h6 class="date-title">28</h6>--}}
-{{--                <span>Dec</span>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--        <div class="movie-content bg-one">--}}
-{{--            <h5 class="title m-0">--}}
-{{--                <a href="#0">basket ball tournament 2020</a>--}}
-{{--            </h5>--}}
-{{--            <div class="movie-rating-percent">--}}
-{{--                <span>327 Montague Street</span>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</div>--}}

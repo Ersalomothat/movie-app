@@ -27,7 +27,8 @@ class PaymentController extends Controller
         return view('home.payment.payment', [
             'detail' => $detail,
             'user' => $user,
-            'canPay' => $canPay
+            'isPaid' => false,
+            'canPay' => $canPay,
         ]);
     }
 
