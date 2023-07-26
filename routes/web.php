@@ -57,8 +57,13 @@ Route::group([
         ->group(function () {
             Route::get('booking/{booking}', 'payment')->name('payment');
             Route::post('{booking}/payment', 'makePayment')->name('make-payment');
-
-
+        });
+    Route::controller(\App\Http\Controllers\BookingController::class)
+        ->prefix('booking')
+        ->as('booking.')
+        ->group(function (){
+            Route::post("cancel-booking-movie/{booking}","cancelMovieBooking")->name('cancel-booking-movie');
+            Route::post("booking-again/{booking}","bookingAgain")->name('booking-again');
         });
 });
 

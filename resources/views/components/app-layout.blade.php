@@ -40,6 +40,13 @@
 
 @includeWhen(request()->is('home'),'layouts.inc.footer')
 @include('layouts.js')
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': "{{csrf_token()}}"
+        }
+    })
+</script>
 @stack('scripts')
 <livewire:scripts/>
 </body>

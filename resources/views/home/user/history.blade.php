@@ -7,9 +7,6 @@
             <h3 class="title">{{$title}}</h3>
             <div class="row justify-content-between">
                 <div class="col mb-50 mb-lg-0">
-                    {{--                <div class="col-md-4 col-lg-6 col-xl-8">--}}
-                    {{--                    <div class="widget-1 widget-banner p-1">--}}
-                    {{--                        <div class="col-lg-9 mb-50 mb-lg-0">--}}
                     <div class="filter-tab tab">
                         <div class="filter-area">
                             <div class="filter-main">
@@ -79,8 +76,10 @@
                                                 </h5>
                                                 <p class="duration">2hrs 50 min</p>
                                                 <div class="release">
-                                                <span>Release Date : </span> <a href="#0">{{$booking->showtime->movie['release_date']}}</a><br>
-                                                    <span>Age Rating : </span> <a href="#0">{{$booking->showtime->movie['age_rating']}}</a>
+                                                    <span>Release Date : </span> <a
+                                                        href="#0">{{$booking->showtime->movie['release_date']}}</a><br>
+                                                    <span>Age Rating : </span> <a
+                                                        href="#0">{{$booking->showtime->movie['age_rating']}}</a>
                                                 </div>
                                                 <div class="release">
                                                 </div>
@@ -92,10 +91,20 @@
                                                         <span class="content">88%</span>
                                                     </li>
                                                     <li>
-                                                        <div class="thumb">
-                                                            <img src="/demo/assets/images/movie/cake.png" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
+                                                        <form class="w-auto"
+                                                              @if($booking["status"] == "paid")
+                                                            action="{{route('home.booking.cancel-booking-movie', $booking["id"])}}"
+                                                            {{--for booking again--}}
+                                                              @else
+                                                            action="{{route('home.booking.booking-again', $booking["id"])}}"
+                                                              @endif
+                                                            method="post"
+                                                            id="cancel-booking">
+                                                            @csrf
+                                                            <button class="custom-button" id="cancel-btn"
+                                                                    type="submit" data-id="">{{$booking["status"] == "paid" ? "cancel":"booking again"}}
+                                                            </button>
+                                                        </form>
                                                     </li>
                                                 </ul>
                                                 <div class="book-area">
@@ -127,20 +136,30 @@
                                 </div>
                             </div>
                         </div>
-                        {{--                                <div class="pagination-area text-center">--}}
-                        {{--                                    <a href="#0"><i class="fas fa-angle-double-left"></i><span>Prev</span></a>--}}
-                        {{--                                    <a href="#0">1</a>--}}
-                        {{--                                    <a href="#0">2</a>--}}
-                        {{--                                    <a href="#0" class="active">3</a>--}}
-                        {{--                                    <a href="#0">4</a>--}}
-                        {{--                                    <a href="#0">5</a>--}}
-                        {{--                                    <a href="#0"><span>Next</span><i class="fas fa-angle-double-right"></i></a>--}}
-                        {{--                                </div>--}}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    </div>
-    </div>
 @stop
+@push('scripts')
+{{--    <script !src="">--}}
+{{--        $("#cancel-booking").on('click', function (e) {--}}
+{{--            e.preventDefault()--}}
+
+{{--            $.ajax({--}}
+{{--                url : e.target["action"],--}}
+{{--                method : e.target["method"],--}}
+{{--                processData: false,--}}
+{{--                contentType: 'json',--}}
+{{--                dataType: false,--}}
+{{--                success(res) {--}}
+
+{{--                },--}}
+{{--                error(res) {--}}
+
+{{--                },--}}
+{{--            })--}}
+{{--        })--}}
+{{--    </script>--}}
+@endpush
