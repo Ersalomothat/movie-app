@@ -4,7 +4,7 @@
     "scripts": {
         "vite": "vite",
         "build": "vite build",
-        "dev": "npm-run-all --parallel php vite",
+        "dev": "npm-run-all --parallel vite php",
         "php" : "php artisan serve"
     },
     "devDependencies": {

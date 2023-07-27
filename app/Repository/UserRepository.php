@@ -10,7 +10,7 @@ class UserRepository
 
     public function __construct(User $user)
     {
-        $this->user = $user ?? new User();
+        $this->user = $user or new User();
     }
 
     public function find($id):User

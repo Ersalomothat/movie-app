@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BookingController;
 
 Route::get('/', fn() => to_route('home'));
 Route::get('home', HomeController::class)->name('home');
@@ -15,9 +16,9 @@ Route::group([
     'as' => 'auth.'
 ], function () {
     Route::controller(AuthController::class)->group(function () {
-        Route::view('sign-in', 'auth.sign-in')->name('sign-in');
+        Route::view('sign-in', 'auth.sign-in')->name('view.sign-in');
         Route::post('sign-in', 'signIn')->name('sign-in');
-        Route::view('sign-up', 'auth.sign-up')->name('sign-up');
+        Route::view('sign-up', 'auth.sign-up')->name('view.sign-up');
         Route::post('sign-up', 'signUp')->name('sign-up');
     });
 });
@@ -58,12 +59,13 @@ Route::group([
             Route::get('booking/{booking}', 'payment')->name('payment');
             Route::post('{booking}/payment', 'makePayment')->name('make-payment');
         });
-    Route::controller(\App\Http\Controllers\BookingController::class)
+    Route::controller(BookingController::class)
         ->prefix('booking')
         ->as('booking.')
         ->group(function (){
             Route::post("cancel-booking-movie/{booking}","cancelMovieBooking")->name('cancel-booking-movie');
             Route::post("booking-again/{booking}","bookingAgain")->name('booking-again');
+            Route::post("booking/{booking}","booking")->name('booking');
         });
 });
 

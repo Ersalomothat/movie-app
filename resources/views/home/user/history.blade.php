@@ -94,7 +94,8 @@
                                                         <form class="w-auto"
                                                               @if($booking["status"] == "paid")
                                                             action="{{route('home.booking.cancel-booking-movie', $booking["id"])}}"
-                                                            {{--for booking again--}}
+                                                              @elseif($booking["status"] == "pending")
+                                                            action="{{route('home.booking.booking', $booking["id"])}}"
                                                               @else
                                                             action="{{route('home.booking.booking-again', $booking["id"])}}"
                                                               @endif
@@ -102,7 +103,14 @@
                                                             id="cancel-booking">
                                                             @csrf
                                                             <button class="custom-button" id="cancel-btn"
-                                                                    type="submit" data-id="">{{$booking["status"] == "paid" ? "cancel":"booking again"}}
+                                                                    type="submit" data-id="">
+                                                                @if($booking["status"] == "paid")
+                                                                    {{__("cancel")}}
+                                                                @elseif($booking["status"] == "pending")
+                                                                    {{__("booking")}}
+                                                                @else
+                                                                    {{__("booking again")}}
+                                                                @endif
                                                             </button>
                                                         </form>
                                                     </li>
