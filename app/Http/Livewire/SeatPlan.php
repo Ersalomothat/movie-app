@@ -131,7 +131,7 @@ class SeatPlan extends Component
     {
         $seats = $this->divideSeatsIntoSections();
         return view('livewire.seat-plan', [
-            'seats' => $this->divideSeatsIntoSections(),
+            'seats' => $seats,
         ]);
 
     }
