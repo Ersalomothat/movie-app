@@ -14,40 +14,28 @@ use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-    private BookingService $bookingService;
-    private SeatService $seatService;
-
-    public function __construct(
-        BookingServiceInterface $bookingService,
-        SeatServiceInterface $seatService,
-    ) {
+    private BookingServiceInterface $bookingService;
+    public function __construct(BookingService $bookingService,) {
         $this->bookingService = $bookingService;
-        $this->seatService = $seatService;
     }
 
-    public function cancelMovieBooking(Request $request, Booking $booking)
+    public function cancelMovieBooking(Request $request, $idBooking)
     {
-        $total_price = $booking["total_price"];
-        $user = User::find($booking->user_id);
-
-        $booking->update([
-            'status' => StatusBooking::CANCELED->value,
-            'total_price' => 0
-        ]);
-        $user_balance = $user->balance()->first();
-        $user_balance->update([
-            'amount' => $user_balance["amount"] + $total_price
-        ]);
-        $this->seatService->changeAvailableSeat(explode(",", $booking["ids_seats"]));
+        $booking = $this->bookingService->findOrFail($idBooking);
+        $this->bookingService->cancelBooking($booking);
         return back()->with('success', 'Booking canceled');
     }
 
-    public function bookingAgain(Request $request, Booking $booking)
+    public function bookingAgain(Request $request, int $idBooking)
     {
+        $booking = $this->bookingService->findOrFail($idBooking);
+        $isPaid = $this->bookingService->makeBookingPayment($booking);
+        if(!$isPaid) return back()->with('error', 'Payment rejected');
 
         return back()->with('success', 'Booking again');
     }
     public function booking(Request $request, Booking $booking) {
+
         return back()->with('success', 'Booked');
 
     }

@@ -63,8 +63,8 @@ Route::group([
         ->prefix('booking')
         ->as('booking.')
         ->group(function (){
-            Route::post("cancel-booking-movie/{booking}","cancelMovieBooking")->name('cancel-booking-movie');
-            Route::post("booking-again/{booking}","bookingAgain")->name('booking-again');
+            Route::post("cancel-booking-movie/{id}","cancelMovieBooking")->name('cancel-booking-movie');
+            Route::post("booking-again/{id}","bookingAgain")->name('booking-again');
             Route::post("booking/{booking}","booking")->name('booking');
         });
 });
