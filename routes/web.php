@@ -25,7 +25,8 @@ Route::group([
 
 Route::group([
     'prefix' => 'movie-app',
-    'as' => 'home.'
+    'as' => 'home.',
+    'middleware' => ['ClearBackHistory']
 ], function () {
     Route::delete('logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:web');
     Route::controller(MovieController::class)

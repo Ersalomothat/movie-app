@@ -68,7 +68,7 @@
                             <input type="hidden" name="current_url" value="{{\URL::full()}}" />
                             <input type="hidden" name="seat_number" value="{{$seat_number}}" />
                             <div class="form-group">
-                                <input type="text" required placeholder="Full Name" name="name">
+                                <input type="text" required placeholder="Full Name" name="name"/>
                                 @error('name')
                                 <span class="text text-danger">{{$message}}</span>
                                 @enderror

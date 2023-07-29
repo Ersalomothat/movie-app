@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Enum\StatusBooking;
 use App\Models\Booking;
 use App\Models\Seat;
+use App\Services\seat\SeatService;
+use App\Services\seat\SeatServiceInterface;
 use App\Services\user\UserService;
 use App\Services\user\UserServiceInterface;
 use Illuminate\Http\Request;
@@ -12,10 +14,12 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     private UserServiceInterface $userService;
+    private SeatServiceInterface $seatService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, SeatService $seatService)
     {
         $this->userService = $userService;
+        $this->seatService = $seatService;
 
     }
 
@@ -58,13 +62,10 @@ class UserController extends Controller
         $logged = $this->userService->logIn($user["email"], $password);
         $age = get_age($user['birth_Date']);
 
-        if ($age < $movie['age_rating']) {
-            $current_url = $request->input('current_url');
-            return redirect()
-                ->to($current_url)->with('info', 'Your age does\'nt fit to this film');
-        }
+        if ($age < $movie['age_rating']) return to_route('home')->with('info', 'Your age does\'nt fit to this film');
 
-        $total_price = count(explode(',', $request->input('seat_number'))) * $movie['ticket_price'];
+        $seats_number = explode(',', $request->input('seat_number'));
+        $total_price = count($seats_number) * $movie['ticket_price'];
 
         if ($logged) {
             $booking = $user->booking()->create([
@@ -74,9 +75,7 @@ class UserController extends Controller
                 'total_price' => $total_price,
                 'status' => StatusBooking::PENDING->value,
             ]);
-            Seat::whereIn('seat_number', explode(",", $request->input('seat_number')))->update([
-                'is_available' => 0
-            ]);
+            $this->seatService->changeAvailableSeat($seats_number,0);
 
             return to_route('home.payment.payment', $booking["id"])->with('success', 'Added to Booked payment');
         }
