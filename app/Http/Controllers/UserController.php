@@ -50,7 +50,7 @@ class UserController extends Controller
         $data = $request->validate([
             'name' => 'required',
             'email' => 'required',
-            'birth_Date' => 'required',
+            'birth_date' => 'required',
         ]);
 
         $password = '12345678';
@@ -60,7 +60,7 @@ class UserController extends Controller
 
         $user = $this->userService->create($data);
         $logged = $this->userService->logIn($user["email"], $password);
-        $age = get_age($user['birth_Date']);
+        $age = get_age($user['birth_date']);
 
         if ($age < $movie['age_rating']) return to_route('home')->with('info', 'Your age does\'nt fit to this film');
 

@@ -82,8 +82,8 @@
                             <div class="form-group">
                                 <label for="">
                                     Birth of date
-                                <input type="date" name="birth_Date" required>
-                                    @error('birth_Date')
+                                <input type="date" name="birth_date" required>
+                                    @error('birth_date')
                                     <span class="text text-danger">{{$message}}</span>
                                     @enderror
                                 </label>
