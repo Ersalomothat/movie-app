@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
                 $movies = $res->json();
                 foreach ($movies as $movie) {
                     unset($movie["id"]);
-                    Movie::create($movie);
+                    $movie = Movie::create($movie);
+                    var_dump($movie);
                 }
             }
         }

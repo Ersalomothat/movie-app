@@ -17,17 +17,12 @@ class HomeController extends Controller
     public function __invoke(Request $request): View
     {
 
-        $q = $request->query("q","");
-
-        $movies = Cache::remember("movies_query_" . $q, 36000, function () use ($q) {
-            $movies = Movie::query();
-            if ($q) $movies->search($q);
-
-            return $movies->paginate(20);
-        });
+        $q = $request->query("q", "");
+        $movies = Movie::search($q);
         return view('home.index', [
-            'movies' => $movies,
+            'movies' => $movies->paginate(20),
             'q' => $q
         ]);
+
     }
 }

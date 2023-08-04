@@ -7,7 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     @include('layouts.styles')
     <livewire:styles/>
-    @vite([])
+{{--    @vite([])--}}
+
     <title>{{$title}}</title>
 </head>
 
@@ -52,6 +53,5 @@
 @stack('scripts')
 
 <livewire:scripts/>
-
 </body>
 </html>
