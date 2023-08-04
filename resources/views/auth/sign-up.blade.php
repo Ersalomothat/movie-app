@@ -29,9 +29,9 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="birth_Date">Birth of date<span>*</span></label>
-                            <input type="date" name="birth_Date" id="birth_Date">
-                            @error('birth_Date')
+                            <label for="birth_date">Birth of date<span>*</span></label>
+                            <input type="date" name="birth_date" id="birth_date">
+                            @error('birth_date')
                             <span class="text-danger">
                                 {{$message}}
                             </span>
