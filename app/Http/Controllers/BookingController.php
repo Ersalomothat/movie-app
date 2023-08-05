@@ -30,9 +30,9 @@ class BookingController extends Controller
     {
         $booking = $this->bookingService->findOrFail($idBooking);
         $isPaid = $this->bookingService->makeBookingPayment($booking);
-        if(!$isPaid) return back()->with('error', 'Payment rejected');
+        if(!$isPaid) return back()->with('warning', 'Your balance run out');
 
-        return back()->with('success', 'Booking again');
+        return back()->with('success', 'Booking success');
     }
     public function booking(Request $request, Booking $booking) {
 

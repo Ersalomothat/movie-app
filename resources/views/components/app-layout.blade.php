@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     @include('layouts.styles')
     <livewire:styles/>
-{{--    @vite([])--}}
+    @vite([])
 
     <title>{{$title}}</title>
 </head>
@@ -28,17 +28,10 @@
 <a href="#0" class="scrollToTop">
     <i class="fas fa-angle-up"></i>
 </a>
-<!-- ==========Overlay========== -->
 
-<!-- ==========Header-Section========== -->
 @includeWhen(!request()->is('auth/*'), 'layouts.inc.header')
-<!-- ==========Header-Section========== -->
 
-<!-- ==========Movie-Main-Section========== -->
 {{$slot}}
-<!-- ==========Movie-Main-Section========== -->
-
-
 @includeWhen(request()->is('home'),'layouts.inc.footer')
 @include('layouts.js')
 <script>

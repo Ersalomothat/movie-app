@@ -12,7 +12,7 @@
                         @csrf
                         <div class="form-group">
                             <label for="name">Name<span>*</span></label>
-                            <input type="text" name="name" placeholder="Enter Your Name" id="name"/>
+                            <input type="text" name="name" value="{{old('name')}}" placeholder="Enter Your Name" id="name"/>
                             @error('name')
                             <span class="text-danger">
                                 {{$message}}
@@ -21,7 +21,7 @@
                         </div>
                         <div class="form-group">
                             <label for="email1">Email<span>*</span></label>
-                            <input type="email" name="email" placeholder="Enter Your Email" id="email1">
+                            <input type="email" name="email" value="{{old('email')}}" placeholder="Enter Your Email" id="email1">
                             @error('email')
                             <span class="text-danger">
                                 {{$message}}
@@ -30,7 +30,7 @@
                         </div>
                         <div class="form-group">
                             <label for="birth_date">Birth of date<span>*</span></label>
-                            <input type="date" name="birth_date" id="birth_date">
+                            <input type="date" name="birth_date" value="{{old('birth_date')}}" id="birth_date">
                             @error('birth_date')
                             <span class="text-danger">
                                 {{$message}}
@@ -39,7 +39,7 @@
                         </div>
                         <div class="form-group">
                             <label for="pass1">Password<span>*</span></label>
-                            <input type="password" name="password" placeholder="Password" id="pass1">
+                            <input type="password" value="{{old('password')}}" name="password" placeholder="Password" id="pass1">
                             @error('password')
                             <span class="text-danger">
                                 {{$message}}

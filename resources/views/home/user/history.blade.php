@@ -94,10 +94,10 @@
                                                         <form class="w-auto"
                                                               @if($booking["status"] == "paid")
                                                             action="{{route('home.booking.cancel-booking-movie', $booking["id"])}}"
-                                                              @elseif($booking["status"] == "pending")
-                                                            action="{{route('home.booking.booking', $booking["id"])}}"
-                                                              @else
+                                                              @elseif($booking["status"] == "pending" or $booking["status"] == "canceled")
                                                             action="{{route('home.booking.booking-again', $booking["id"])}}"
+{{--                                                              @else--}}
+{{--                                                            action="{{route('home.booking.booking', $booking["id"])}}"--}}
                                                               @endif
                                                             method="post"
                                                             id="cancel-booking">
@@ -106,10 +106,10 @@
                                                                     type="submit" data-id="">
                                                                 @if($booking["status"] == "paid")
                                                                     {{__("cancel")}}
-                                                                @elseif($booking["status"] == "pending")
+                                                                @elseif($booking["status"] == "pending" or $booking["status"])
                                                                     {{__("booking")}}
-                                                                @else
-                                                                    {{__("booking again")}}
+{{--                                                                @else--}}
+{{--                                                                    {{__("booking")}}--}}
                                                                 @endif
                                                             </button>
                                                         </form>
@@ -131,7 +131,13 @@
                                                             </a>
                                                         </div>
                                                         <div class="react-item">
-                                                            <a href="#0">
+                                                            <a href="{{route('home.movie.seat-plan', [
+                                                                            'movie' => $booking->showtime['movie'],
+                                                                            'showtime' => $booking->showtime,
+                                                                            'number_seat' => $booking->ids_seats,
+
+
+                                                                             ])}}">
                                                                 <span>Number seats : {{$booking->ids_seats}}</span>
                                                             </a>
                                                         </div>
