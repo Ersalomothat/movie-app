@@ -30,6 +30,11 @@ jobs:
       - name: Run composer install if composer.json exists
         if: steps.check_files.outputs.files_exists == 'true'
         run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
+      - name: Run Cached route view config
+        run: |
+          php artisan route:cache
+          php artisan view:cache
+          php artisan config:cache
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
