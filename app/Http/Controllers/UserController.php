@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enum\StatusBooking;
+use App\Models\Bill;
 use App\Models\Booking;
 use App\Models\Seat;
 use App\Services\seat\SeatService;
@@ -10,6 +11,8 @@ use App\Services\seat\SeatServiceInterface;
 use App\Services\user\UserService;
 use App\Services\user\UserServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -32,8 +35,10 @@ class UserController extends Controller
 
     public function balance(Request $request)
     {
+        $bills = Bill::whereUserId(auth()->id())->get();
         return view('home.user.balance', [
-            'title' => 'Balance'
+            'title' => 'Balance',
+            'bills' => $bills,
         ]);
     }
 
@@ -75,7 +80,7 @@ class UserController extends Controller
                 'total_price' => $total_price,
                 'status' => StatusBooking::PENDING->value,
             ]);
-            $this->seatService->changeAvailableSeat($seats_number,0);
+            $this->seatService->changeAvailableSeat($seats_number, 0);
 
             return to_route('home.payment.payment', $booking["id"])->with('success', 'Added to Booked payment');
         }
@@ -87,25 +92,36 @@ class UserController extends Controller
     {
         $max_amount = '10000000';
         $request->validate([
-            'amount' => 'required|numeric|max:' . $max_amount,
+            'amount' => 'required|numeric|min:10000|max:' . $max_amount,
+        ], [
+            'amount.required' => 'input amount',
+            'amount.numeric' => 'amount must be number',
+            'amount.min'=> 'minimal amount Rp 10.000',
+            'amount.max'=> 'maximal amount Rp 10.000.000',
+
         ]);
         $user = auth()->user();
-        $amount = $request->input('amount');
-        $current_amount = $user->balance['amount'];
-
-        $addingAmount = $current_amount + $amount;
-
-        if ($addingAmount > intval($max_amount)) {
-            return back()->with('success', 'Limit amount is ten million');
-        }
-
-        $user->balance()->update([
-            'amount' => $addingAmount,
-        ], [
-            'amount.numeric' => 'number only :)',
-            'amount.max' => 'Not more than 1 million'
+        $amount = $request->amount;
+        $external_id = Str::random(64);
+        $response = Http::withHeaders([
+            'Authorization' => config('xendit.xendit_auth')
+        ])->post(config('xendit.invoice_url'), [
+            'external_id' => $external_id,
+            'amount' => $amount,
         ]);
 
+        $response = $response->object();
+
+        Bill::create([
+            'user_id' => $user->id,
+            'doc_no' => $external_id,
+            'status' => $response->status,
+            'amount' => $amount,
+            'expiry_date' => $response->expiry_date,
+            'invoice_url' => $response->invoice_url,
+            'currency' => $response->currency,
+            'bank' => 0
+        ]);
         return back()->with('success', 'Top up successfully :) 👍');
     }
 

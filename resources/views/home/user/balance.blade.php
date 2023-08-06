@@ -20,6 +20,43 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-sm-4 col-md-6">
+                    <div class="tab summery-review">
+                        <ul class="tab-menu">
+                            <li>
+                                History
+                            </li>
+
+                        </ul>
+                        <div class="tab-area">
+                            <div class="tab-item active">
+                                    @forelse($bills as $bill)
+                                <div class="movie-review-item py-1">
+                                        <div class="author">
+                                            <div class="movie-review-info">
+                                                <span class="reply-date">{{$bill->created_at}}</span>
+
+                                                <h6 class="subtitle">Rp. {{number_format($bill->amount)}} <span class="">{{$bill->bank}}</span> </h6>
+
+                                                @if($bill['status'] === 'pending')
+                                                    <span><i class="fas fa-check"></i>Success</span>
+                                                @else
+                                                    <span><i class="fas fa-check"></i>{{$bill->status}}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="movie-review-content position-relative">
+                                            <a href="{{$bill->invoice_url}}" class="custom-button py-1"
+                                               style="font-size: 12px;">pay</a>
+                                        </div>
+                                </div>
+                                    @empty
+                                        no history bills
+                                    @endforelse
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

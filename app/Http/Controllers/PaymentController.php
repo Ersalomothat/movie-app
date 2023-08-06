@@ -51,6 +51,7 @@ class PaymentController extends Controller
         if (!$isPaid) {return back()->with('warning', 'Payment rejected!');}
 
         return back()->with('success', 'Payment accepted! :)');
-
     }
+
+
 }

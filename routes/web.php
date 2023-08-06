@@ -68,5 +68,9 @@ Route::group([
             Route::post("booking-again/{id}","bookingAgain")->name('booking-again');
             Route::post("booking/{booking}","booking")->name('booking');
         });
+
+    Route::controller(\App\Http\Controllers\BalanceController::class)->group(function (){
+        Route::post('callback-top-up', 'callbackTopUp')->name('callback-top-up');
+    });
 });
 
