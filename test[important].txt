@@ -1,0 +1,3 @@
+http://my-portfolio-app-movie.azurewebsites.net/movie-app/callback-top-up
+
+https://d3ba-182-3-46-61.ngrok-free.app/movie-app/callback-top-up
